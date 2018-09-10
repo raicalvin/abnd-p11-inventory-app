@@ -3,14 +3,22 @@ package com.example.inventoryapp.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.example.inventoryapp.data.StoreContract;
 
 public class StoreDbHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "StoreListings.dp";
 
-    private static final String SQL_CREATE_ENTRIES =
-            "";
+    private static final String INTEGER_TYPE = " INTEGER, ";
+    private static final String TEXT_TYPE = " TEXT, ";
+    private static final String DECIMAL_TYPE = " DECIMAL, ";
+
+    public static final String SQL_CREATE_ENTRIES =
+            "CREATE TABLE " + StoreContract.TABLE_NAME + "(" + StoreContract._ID + INTEGER_TYPE +
+                    StoreContract.COL_PRODUCT_NAME + TEXT_TYPE + StoreContract.COL_PRICE + DECIMAL_TYPE +
+                    StoreContract.COL_QUANTITY + INTEGER_TYPE + StoreContract.COL_SUPPLIER_NAME + TEXT_TYPE +
+                    StoreContract.COL_SUPPLIER_PHONE + " INTEGER);";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + StoreContract.TABLE_NAME;
 
