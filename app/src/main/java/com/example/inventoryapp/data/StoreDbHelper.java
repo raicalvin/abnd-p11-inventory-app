@@ -8,17 +8,12 @@ import com.example.inventoryapp.data.StoreContract;
 public class StoreDbHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "StoreListings.dp";
+    public static final String DATABASE_NAME = "store.db";
 
     private static final String INTEGER_TYPE = " INTEGER, ";
     private static final String TEXT_TYPE = " TEXT, ";
     private static final String DECIMAL_TYPE = " DECIMAL, ";
 
-    public static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + StoreContract.TABLE_NAME + "(" + StoreContract._ID + INTEGER_TYPE +
-                    StoreContract.COL_PRODUCT_NAME + TEXT_TYPE + StoreContract.COL_PRICE + DECIMAL_TYPE +
-                    StoreContract.COL_QUANTITY + INTEGER_TYPE + StoreContract.COL_SUPPLIER_NAME + TEXT_TYPE +
-                    StoreContract.COL_SUPPLIER_PHONE + " INTEGER);";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + StoreContract.TABLE_NAME;
 
@@ -43,6 +38,13 @@ public class StoreDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        String SQL_CREATE_ENTRIES =
+            "CREATE TABLE " + StoreContract.TABLE_NAME + "(" + StoreContract._ID + INTEGER_TYPE +
+                    StoreContract.COL_PRODUCT_NAME + TEXT_TYPE + StoreContract.COL_PRICE + DECIMAL_TYPE +
+                    StoreContract.COL_QUANTITY + INTEGER_TYPE + StoreContract.COL_SUPPLIER_NAME + TEXT_TYPE +
+                    StoreContract.COL_SUPPLIER_PHONE + " INTEGER);";
+
         db.execSQL(SQL_CREATE_ENTRIES);
     }
 
