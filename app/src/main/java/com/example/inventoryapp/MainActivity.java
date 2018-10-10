@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.inventoryapp.data.StoreContract;
+import com.example.inventoryapp.data.StoreContract.StoreEntry;
 import com.example.inventoryapp.data.StoreDbHelper;
 
 public class MainActivity extends AppCompatActivity {
 
+    // This is used to help us create, manage, and open database connections
     StoreDbHelper mDbHelper = new StoreDbHelper(this);
+
     SQLiteDatabase db;
 
     @Override
@@ -27,21 +29,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // TODO: Override the onStart() method to refresh the database
+
     /**
      * Insert a new product with the appropriate values into the database
      */
     private void insertProduct() {
         db = mDbHelper.getReadableDatabase();
+
         // EXERCISE AREA
         ContentValues values = new ContentValues();
-        values.put(StoreContract.COL_PRODUCT_NAME, "Some headphones");
-        values.put(StoreContract.COL_PRICE, 4.50);
-        values.put(StoreContract.COL_QUANTITY, 4);
-        values.put(StoreContract.COL_SUPPLIER_NAME, "Richa and famous");
-        values.put(StoreContract.COL_SUPPLIER_PHONE, 9876543);
-        long newRowID = db.insert(StoreContract.TABLE_NAME, null, values);
+        values.put(StoreEntry.COLUMN_IPHONE_NAME, "iPhone Xs Max");
+        values.put(StoreEntry.COLUMN_PRICE, 999.99);
+        values.put(StoreEntry.COLUMN_QUANTITY, 4);
+        values.put(StoreEntry.COLUMN_SUPPLIER_NAME, "Apple");
+        values.put(StoreEntry.COLUMN_SUPPLIER_PHONE, "9167652212");
+        long newRowID = db.insert(StoreEntry.TABLE_NAME, null, values);
         Log.i("MainActivity", "New ROW ID: " + newRowID);
         // END EXERCISE AREA
+
     }
 
     /**
@@ -50,13 +56,13 @@ public class MainActivity extends AppCompatActivity {
     private void displayDatabaseInfo() {
 
         String[] proj = {
-          StoreContract._ID,
-          StoreContract.COL_PRODUCT_NAME,
-          StoreContract.COL_PRICE
+            StoreEntry._ID,
+            StoreEntry.COLUMN_IPHONE_NAME,
+            StoreEntry.COLUMN_PRICE
         };
 
         Cursor cursor = db.query(
-                StoreContract.TABLE_NAME,
+                StoreEntry.TABLE_NAME,
                 proj,
                 null,
                 null,
@@ -72,6 +78,6 @@ public class MainActivity extends AppCompatActivity {
         } finally {
             cursor.close();
         }
-    }
+    } // END TEMPORARY HELPER METHOD
 
 }
