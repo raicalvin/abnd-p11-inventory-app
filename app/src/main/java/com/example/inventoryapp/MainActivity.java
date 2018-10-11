@@ -1,17 +1,22 @@
 package com.example.inventoryapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.inventoryapp.data.StoreContract.StoreEntry;
 import com.example.inventoryapp.data.StoreDbHelper;
 
 public class MainActivity extends AppCompatActivity {
+
+    Button addItemButton;
 
     // This is used to help us create, manage, and open database connections
     StoreDbHelper mDbHelper = new StoreDbHelper(this);
@@ -27,12 +32,27 @@ public class MainActivity extends AppCompatActivity {
 
         displayDatabaseInfo();
 
+        // Link button to open EditorActivity
+        addItemButton = (Button) this.findViewById(R.id.open_editor_activity);
+
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
-    // TODO: Override the onStart() method to refresh the database
+    // Override the onStart() method to refresh the database
+    @Override
+    protected void onStart() {
+        super.onStart();
+        displayDatabaseInfo();
+    }
 
     /**
-     * Insert a new product with the appropriate values into the database
+     * Insert a new product with the appropriate values into the database.
+     * TODO: Comment this entire method out once the EditorActivity is done
      */
     private void insertProduct() {
         db = mDbHelper.getReadableDatabase();
