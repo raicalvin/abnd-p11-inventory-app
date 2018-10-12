@@ -1,5 +1,6 @@
 package com.example.inventoryapp.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class StoreContract {
@@ -8,6 +9,11 @@ public final class StoreContract {
      * Declare empty constructor to ensure the class cannot be instantiated
      */
     private StoreContract() {}
+
+    /**  Content Authority Creation */
+    public static final String CONTENT_AUTHORITY = "com.example.inventoryapp";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final String PATH_IPHONES = "iphones";
 
 
     public static final class StoreEntry implements BaseColumns {
@@ -23,6 +29,9 @@ public final class StoreContract {
 
         public final static int PRODUCT_IN_STOCK = 1;
         public final static int PRODUCT_OUT_OF_STOCK = 0;
+
+        /** Content URI to access the iPhone data in the provider */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_IPHONES);
 
     }
 

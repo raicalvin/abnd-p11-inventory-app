@@ -75,15 +75,18 @@ public class MainActivity extends AppCompatActivity {
      */
     private void displayDatabaseInfo() {
 
-        String[] proj = {
+        String[] project = {
             StoreEntry._ID,
             StoreEntry.COLUMN_IPHONE_NAME,
-            StoreEntry.COLUMN_PRICE
+            StoreEntry.COLUMN_PRICE,
+            StoreEntry.COLUMN_QUANTITY,
+            StoreEntry.COLUMN_SUPPLIER_NAME,
+            StoreEntry.COLUMN_SUPPLIER_PHONE
         };
 
         Cursor cursor = db.query(
                 StoreEntry.TABLE_NAME,
-                proj,
+                project,
                 null,
                 null,
                 null,
@@ -91,10 +94,44 @@ public class MainActivity extends AppCompatActivity {
                 null
         );
 
+        TextView displayView = (TextView) findViewById(R.id.text_view_store);
 
         try {
-            TextView displayView = (TextView) findViewById(R.id.text_view_store);
-            displayView.setText("Number of rows in store database table: " + cursor.getCount());
+            displayView.setText("The iphones table contains " + cursor.getCount() + " iPhones.\n\n");
+            displayView.append(StoreEntry._ID + " - " +
+            StoreEntry.COLUMN_IPHONE_NAME + " - " +
+            StoreEntry.COLUMN_PRICE + " - " +
+            StoreEntry.COLUMN_QUANTITY + " - " +
+            StoreEntry.COLUMN_SUPPLIER_NAME + " - " +
+            StoreEntry.COLUMN_SUPPLIER_PHONE + "\n");
+
+            // Obtain column index of each column
+            int idColumnIndex = cursor.getColumnIndex(StoreEntry._ID);
+            int nameColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_IPHONE_NAME);
+            int priceColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_PRICE);
+            int quantityColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_QUANTITY);
+            int supplierColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_SUPPLIER_NAME);
+            int phoneColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_SUPPLIER_PHONE);
+
+            while (cursor.moveToNext()) {
+                // Use index to extract value for each column
+                int currentID = cursor.getInt(idColumnIndex);
+                String currentName = cursor.getString(nameColumnIndex);
+                double currentPrice = cursor.getDouble(priceColumnIndex);
+                long currentQuantity = cursor.getInt(quantityColumnIndex);
+                String currentSupplier = cursor.getString(supplierColumnIndex);
+                String currentPhone = cursor.getString(phoneColumnIndex);
+
+                // Display value from each column inside TextView
+                displayView.append(("\n" +
+                        currentID + " - " +
+                        currentName + " - " +
+                        currentPrice + " - " +
+                        currentQuantity + " - " +
+                        currentSupplier + " - " +
+                        currentPhone));
+            }
+
         } finally {
             cursor.close();
         }
