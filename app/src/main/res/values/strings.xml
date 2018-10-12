@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Inventory App</string>
+
+    <!-- Toast string for failed insertion of iPhone -->
+    <string name="editor_insert_iphone_failed">The iPhone was not inserted!</string>
+
+    <!-- Toast string for successful insertion of iPhone -->
+    <string name="editor_insert_iphone_successful">iPhone added!</string>
 </resources>

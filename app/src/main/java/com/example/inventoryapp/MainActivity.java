@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,9 +18,6 @@ import com.example.inventoryapp.data.StoreDbHelper;
 public class MainActivity extends AppCompatActivity {
 
     Button addItemButton;
-
-    // This is used to help us create, manage, and open database connections
-    StoreDbHelper mDbHelper = new StoreDbHelper(this);
 
     SQLiteDatabase db;
 
@@ -52,22 +50,18 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Insert a new product with the appropriate values into the database.
-     * TODO: Comment this entire method out once the EditorActivity is done
      */
     private void insertProduct() {
-        db = mDbHelper.getReadableDatabase();
 
-        // EXERCISE AREA
         ContentValues values = new ContentValues();
         values.put(StoreEntry.COLUMN_IPHONE_NAME, "iPhone Xs Max");
         values.put(StoreEntry.COLUMN_PRICE, 999.99);
         values.put(StoreEntry.COLUMN_QUANTITY, 4);
         values.put(StoreEntry.COLUMN_SUPPLIER_NAME, "Apple");
         values.put(StoreEntry.COLUMN_SUPPLIER_PHONE, "9167652212");
-        long newRowID = db.insert(StoreEntry.TABLE_NAME, null, values);
-        Log.i("MainActivity", "New ROW ID: " + newRowID);
-        // END EXERCISE AREA
 
+        // Insert the values into the database:
+        Uri newUri = getContentResolver().insert(StoreEntry.CONTENT_URI, values);
     }
 
     /**
@@ -84,15 +78,22 @@ public class MainActivity extends AppCompatActivity {
             StoreEntry.COLUMN_SUPPLIER_PHONE
         };
 
-        Cursor cursor = db.query(
-                StoreEntry.TABLE_NAME,
+//        Cursor cursor = db.query(
+//                StoreEntry.TABLE_NAME,
+//                project,
+//                null,
+//                null,
+//                null,
+//                null,
+//                null
+//        );
+
+        Cursor cursor = getContentResolver().query(
+                StoreEntry.CONTENT_URI,
                 project,
                 null,
                 null,
-                null,
-                null,
-                null
-        );
+                null);
 
         TextView displayView = (TextView) findViewById(R.id.text_view_store);
 

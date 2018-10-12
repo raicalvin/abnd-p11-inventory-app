@@ -2,6 +2,7 @@ package com.example.inventoryapp;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -83,12 +84,6 @@ public class EditorActivity extends AppCompatActivity {
 
     public void insertPet() {
 
-        // Create instance of the StoreDbHelper class to manage connection between UI and database
-        StoreDbHelper mDbHelper = new StoreDbHelper(this);
-
-        // Obtain the database in writable mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
         // Obtain input from fields in UI
         String iPhoneName = iPhoneEdtTxt.getText().toString().trim();
         String iPhonePrice = priceEdtTxt.getText().toString().trim();
@@ -102,18 +97,21 @@ public class EditorActivity extends AppCompatActivity {
         if (inputIsValid) {
 
             ContentValues values = new ContentValues();
-
             values.put(StoreEntry.COLUMN_IPHONE_NAME, iPhoneName);
             values.put(StoreEntry.COLUMN_PRICE, Double.valueOf(iPhonePrice));
             values.put(StoreEntry.COLUMN_QUANTITY, Integer.parseInt(iPhoneQuantity));
             values.put(StoreEntry.COLUMN_SUPPLIER_NAME, iPhoneSupplier);
             values.put(StoreEntry.COLUMN_SUPPLIER_PHONE, iPhoneNumber);
 
-            // Insert values into database
-            long newRowId = db.insert(StoreEntry.TABLE_NAME, null, values);
+            // Insert new iphone into database:
+            Uri newUri = getContentResolver().insert(StoreEntry.CONTENT_URI, values);
 
-            Toast newToast = Toast.makeText(getApplicationContext(),"iPhone added!", Toast.LENGTH_SHORT);
-            newToast.show();
+            // Show toast if insertion was successful or failed
+            if (newUri == null) {
+                Toast.makeText(this, getString(R.string.editor_insert_iphone_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.editor_insert_iphone_successful), Toast.LENGTH_SHORT).show();
+            }
 
             // Close and go back to previous activity
             finish();
