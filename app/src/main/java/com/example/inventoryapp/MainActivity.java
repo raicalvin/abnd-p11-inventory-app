@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.inventoryapp.data.StoreContract.StoreEntry;
@@ -64,9 +65,6 @@ public class MainActivity extends AppCompatActivity {
         Uri newUri = getContentResolver().insert(StoreEntry.CONTENT_URI, values);
     }
 
-    /**
-     * TEMPORARY HELPER METHOD
-     */
     private void displayDatabaseInfo() {
 
         String[] project = {
@@ -78,16 +76,6 @@ public class MainActivity extends AppCompatActivity {
             StoreEntry.COLUMN_SUPPLIER_PHONE
         };
 
-//        Cursor cursor = db.query(
-//                StoreEntry.TABLE_NAME,
-//                project,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null
-//        );
-
         Cursor cursor = getContentResolver().query(
                 StoreEntry.CONTENT_URI,
                 project,
@@ -95,47 +83,14 @@ public class MainActivity extends AppCompatActivity {
                 null,
                 null);
 
-        TextView displayView = (TextView) findViewById(R.id.text_view_store);
+        // Find the ListView that will have the iPhone data
+        ListView iPhoneListView = (ListView) findViewById(R.id.list);
 
-        try {
-            displayView.setText("The iphones table contains " + cursor.getCount() + " iPhones.\n\n");
-            displayView.append(StoreEntry._ID + " - " +
-            StoreEntry.COLUMN_IPHONE_NAME + " - " +
-            StoreEntry.COLUMN_PRICE + " - " +
-            StoreEntry.COLUMN_QUANTITY + " - " +
-            StoreEntry.COLUMN_SUPPLIER_NAME + " - " +
-            StoreEntry.COLUMN_SUPPLIER_PHONE + "\n");
+        // Setup an Adapter to create a list item for each row of iPhone data
+        StoreCursorAdapter adapter = new StoreCursorAdapter(this, cursor);
 
-            // Obtain column index of each column
-            int idColumnIndex = cursor.getColumnIndex(StoreEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_IPHONE_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_QUANTITY);
-            int supplierColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_SUPPLIER_NAME);
-            int phoneColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_SUPPLIER_PHONE);
-
-            while (cursor.moveToNext()) {
-                // Use index to extract value for each column
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                double currentPrice = cursor.getDouble(priceColumnIndex);
-                long currentQuantity = cursor.getInt(quantityColumnIndex);
-                String currentSupplier = cursor.getString(supplierColumnIndex);
-                String currentPhone = cursor.getString(phoneColumnIndex);
-
-                // Display value from each column inside TextView
-                displayView.append(("\n" +
-                        currentID + " - " +
-                        currentName + " - " +
-                        currentPrice + " - " +
-                        currentQuantity + " - " +
-                        currentSupplier + " - " +
-                        currentPhone));
-            }
-
-        } finally {
-            cursor.close();
-        }
-    } // END TEMPORARY HELPER METHOD
+        // Attach adapter to ListView
+        iPhoneListView.setAdapter(adapter);
+    }
 
 }
