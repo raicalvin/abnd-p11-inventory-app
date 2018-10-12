@@ -160,7 +160,18 @@ public class StoreProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case IPHONES:
+                return database.delete(StoreContract.StoreEntry.TABLE_NAME, selection, selectionArgs);
+            case IPHONE_ID:
+                selection = StoreContract.StoreEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return database.delete(StoreContract.StoreEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
     }
 
     /**
@@ -168,7 +179,15 @@ public class StoreProvider extends ContentProvider {
      */
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case IPHONES:
+                return StoreContract.StoreEntry.CONTENT_LIST_TYPE;
+            case IPHONE_ID:
+                return StoreContract.StoreEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 
 }
