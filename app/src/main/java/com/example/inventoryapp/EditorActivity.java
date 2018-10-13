@@ -58,7 +58,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         addiPhoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insertPet();
+                saveiPhone();
             }
         });
 
@@ -102,7 +102,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         quantityEdtTxt.setText(Integer.toString(quantity));
     }
 
-    public void insertPet() {
+    public void saveiPhone() {
 
         // Obtain input from fields in UI
         String iPhoneName = iPhoneEdtTxt.getText().toString().trim();
@@ -123,14 +123,22 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             values.put(StoreEntry.COLUMN_SUPPLIER_NAME, iPhoneSupplier);
             values.put(StoreEntry.COLUMN_SUPPLIER_PHONE, iPhoneNumber);
 
-            // Insert new iphone into database:
-            Uri newUri = getContentResolver().insert(StoreEntry.CONTENT_URI, values);
-
             // Show toast if insertion was successful or failed
-            if (newUri == null) {
-                Toast.makeText(this, getString(R.string.editor_insert_iphone_failed), Toast.LENGTH_SHORT).show();
+            if (mCurrentIPhoneUri == null) {
+                Uri newUri = getContentResolver().insert(StoreEntry.CONTENT_URI, values);
+                if (newUri == null) {
+                    Toast.makeText(this, getString(R.string.editor_insert_iphone_failed), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getString(R.string.editor_insert_iphone_successful), Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(this, getString(R.string.editor_insert_iphone_successful), Toast.LENGTH_SHORT).show();
+                int rowsAffected = getContentResolver().update(mCurrentIPhoneUri, values, null, null);
+
+                if (rowsAffected == 0) {
+                    Toast.makeText(this, getString(R.string.editor_update_iphone_failed), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getString(R.string.editor_update_iphone_successful), Toast.LENGTH_SHORT).show();
+                }
             }
 
             // Close and go back to previous activity

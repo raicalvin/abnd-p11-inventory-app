@@ -8,4 +8,8 @@
     <string name="editor_insert_iphone_successful">iPhone added!</string>
 
     <string name="editor_activity_title_edit_iphone">Edit iPhone Entry</string>
+
+    <string name="editor_update_iphone_failed">Updating iPhone Failed...</string>
+
+    <string name="editor_update_iphone_successful">Updated iPhone Successfully!</string>
 </resources>
