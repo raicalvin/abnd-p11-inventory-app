@@ -1,20 +1,31 @@
 package com.example.inventoryapp;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.inventoryapp.data.StoreContract.StoreEntry;
 import com.example.inventoryapp.data.StoreDbHelper;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    /** iPhone Data Loader Identifier */
+    private static final int EXISTING_IPHONE_LOADER = 0;
+
+    private Uri mCurrentIPhoneUri;
 
     EditText iPhoneEdtTxt, priceEdtTxt, quantityEdtTxt, supplierEdtTxt, phoneEdtTxt;
     Button incrementBtn, decrementBtn, addiPhoneBtn;
@@ -25,9 +36,9 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
         Intent intent = getIntent();
-        Uri currentPetUri = intent.getData();
+        mCurrentIPhoneUri = intent.getData();
 
-        if (currentPetUri == null) {
+        if (mCurrentIPhoneUri == null) {
             setTitle("Add New iPhone");
         } else {
             setTitle(getString(R.string.editor_activity_title_edit_iphone));
@@ -47,10 +58,7 @@ public class EditorActivity extends AppCompatActivity {
         addiPhoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 insertPet();
-
-                // TODO: Setup increment and decrement buttons
             }
         });
 
@@ -67,6 +75,8 @@ public class EditorActivity extends AppCompatActivity {
                 decrementQuantity();
             }
         });
+
+        getLoaderManager().initLoader(EXISTING_IPHONE_LOADER, null, this);
 
     }
 
@@ -162,4 +172,72 @@ public class EditorActivity extends AppCompatActivity {
 
     }
 
+    /** CURSORLOADER METHODS IMPLEMENTED BELOW */
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        if (mCurrentIPhoneUri == null) {
+            return null;
+        }
+
+        String[] project = {
+                StoreEntry._ID,
+                StoreEntry.COLUMN_IPHONE_NAME,
+                StoreEntry.COLUMN_PRICE,
+                StoreEntry.COLUMN_QUANTITY,
+                StoreEntry.COLUMN_SUPPLIER_NAME,
+                StoreEntry.COLUMN_SUPPLIER_PHONE
+        };
+
+        return new CursorLoader(
+                this,
+                mCurrentIPhoneUri,
+                project,
+                null,
+                null,
+                null);
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+
+        if (cursor.moveToFirst()) {
+            // Find the columns of pet attributes that we're interested in
+            int nameColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_IPHONE_NAME);
+            int priceColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_PRICE);
+            int quantityColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_QUANTITY);
+            int supplierColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_SUPPLIER_NAME);
+            int phoneColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_SUPPLIER_PHONE);
+
+
+            // Extract out the value from the Cursor for the given column index
+            String name = cursor.getString(nameColumnIndex);
+            Double price = cursor.getDouble(priceColumnIndex);
+            Long quantity = cursor.getLong(quantityColumnIndex);
+            String supplier = cursor.getString(supplierColumnIndex);
+            String phone = cursor.getString(phoneColumnIndex);
+
+            // Update the views on the screen with the values from the database
+            iPhoneEdtTxt.setText(name);
+            priceEdtTxt.setText(price.toString());
+            quantityEdtTxt.setText(quantity.toString());
+            supplierEdtTxt.setText(supplier);
+            phoneEdtTxt.setText(phone);
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        iPhoneEdtTxt.setText("");
+        priceEdtTxt.setText("");
+        quantityEdtTxt.setText("");
+        supplierEdtTxt.setText("");
+        phoneEdtTxt.setText("");
+    }
 }
