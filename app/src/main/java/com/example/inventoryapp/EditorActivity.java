@@ -28,7 +28,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Uri mCurrentIPhoneUri;
 
     EditText iPhoneEdtTxt, priceEdtTxt, quantityEdtTxt, supplierEdtTxt, phoneEdtTxt;
-    Button incrementBtn, decrementBtn, addiPhoneBtn;
+    Button incrementBtn, decrementBtn, addiPhoneBtn, deleteiPhoneBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,19 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 saveiPhone();
             }
         });
+
+        deleteiPhoneBtn = (Button) findViewById(R.id.delete_iphone_button);
+
+        deleteiPhoneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // deleteiPhone();
+            }
+        });
+
+        if (mCurrentIPhoneUri == null) {
+            deleteiPhoneBtn.setVisibility(View.GONE);
+        }
 
         incrementBtn.setOnClickListener(new View.OnClickListener() {
             @Override

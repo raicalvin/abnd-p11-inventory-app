@@ -160,6 +160,13 @@
                 android:text="Save iPhone"
                 android:layout_alignParentBottom="true"
                 android:id="@+id/add_iphone_button"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Delete iPhone"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/delete_iphone_button"/>
         </LinearLayout>
 
 
