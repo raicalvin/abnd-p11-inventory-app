@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Inventory App</string>
+    <string name="app_name">iPhone Inventory App</string>
 
     <!-- Toast string for failed insertion of iPhone -->
     <string name="editor_insert_iphone_failed">The iPhone was not inserted!</string>
