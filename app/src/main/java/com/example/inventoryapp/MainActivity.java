@@ -17,9 +17,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.inventoryapp.data.StoreContract.StoreEntry;
 import com.example.inventoryapp.data.StoreDbHelper;
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                Log.i("TAG", "onItemClick: the smaaaaalllll id is " + id);
 
                 Uri currentIPhoneUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, id);
 
@@ -147,5 +150,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<Cursor> loader) {
         // Callback for when data needs to be deleted
         mCursorAdapter.swapCursor(null);
+    }
+
+    public void sellItem(long quantity, String ID) {
+        Log.i("SUPPP", "the BIG ID is  " + ID);
+
+        ContentValues values = new ContentValues();
+        values.put(StoreEntry._ID, ID);
+        values.put(StoreEntry.COLUMN_QUANTITY, quantity);
+
+        Uri iPhoneSellUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, Long.parseLong(ID));
+
+        // Insert the values into the database:
+        int rowsAffected = getContentResolver().update(iPhoneSellUri, values, null, null);
     }
 }

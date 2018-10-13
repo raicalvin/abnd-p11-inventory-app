@@ -4,25 +4,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="@dimen/activity_margin"
     android:descendantFocusability="blocksDescendants"
-    >
+    android:orientation="horizontal"
+    android:padding="@dimen/activity_margin">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="3">
+        android:layout_weight="3"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
-            android:textStyle="bold"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="#1D4682"
-            android:layout_marginBottom="8dp"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/price"
@@ -42,15 +42,14 @@
     </LinearLayout>
 
     <ImageButton
+        android:id="@+id/sale_button"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:id="@+id/imageButton"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_money_button_sign"
+        android:layout_centerVertical="true"
         android:layout_weight="1"
         android:backgroundTint="#58D294"
         android:focusable="false"
-        />
+        android:src="@drawable/ic_money_button_sign" />
 
 </LinearLayout>

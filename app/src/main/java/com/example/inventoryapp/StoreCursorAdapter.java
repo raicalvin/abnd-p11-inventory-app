@@ -1,12 +1,17 @@
 package com.example.inventoryapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.inventoryapp.data.StoreContract;
 
@@ -14,6 +19,12 @@ import com.example.inventoryapp.data.StoreContract;
  * This will populate list items in the list view for all iPhones
  */
 public class StoreCursorAdapter extends CursorAdapter {
+
+    private MainActivity activity;
+    public StoreCursorAdapter(MainActivity context, Cursor c) {
+        super(context, c, 0);
+        this.activity = context;
+    }
 
     /** Construct a new StoreCursorAdapter */
     public StoreCursorAdapter(Context context, Cursor c) {
@@ -43,11 +54,31 @@ public class StoreCursorAdapter extends CursorAdapter {
         // Read iPhone data from Cursor
         String iPhoneName = cursor.getString(nameColumnIndex);
         String iPhonePrice = cursor.getString(priceColumnIndex);
-        String iPhoneQuantity = cursor.getString(quantityColumnIndex);
+        final String iPhoneQuantity = cursor.getString(quantityColumnIndex);
 
         // Update the product details
         nameTextView.setText(iPhoneName);
         priceTextView.setText("$" + iPhonePrice);
         quantityTextView.setText("Stock: " + iPhoneQuantity);
+
+        /** EXPERIMENTAL AREA */
+        ImageButton saleButton = (ImageButton) view.findViewById(R.id.sale_button);
+
+        int idColumnIndex = cursor.getColumnIndex(StoreContract.StoreEntry._ID);
+        final String iPhoneId = cursor.getString(idColumnIndex);
+
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long soldQuantity = Long.parseLong(iPhoneQuantity) - 1;
+                if (soldQuantity < 0) {
+                    Toast.makeText(v.getContext(), "Hey!", Toast.LENGTH_SHORT).show();
+                } else {
+                    activity.sellItem(soldQuantity, iPhoneId);
+                }
+            }
+        });
+        /** EXPERIMENTAL AREA */
+
     }
 }
