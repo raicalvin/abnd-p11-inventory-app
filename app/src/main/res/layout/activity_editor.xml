@@ -157,7 +157,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add iPhone"
+                android:text="Save iPhone"
                 android:layout_alignParentBottom="true"
                 android:id="@+id/add_iphone_button"/>
         </LinearLayout>

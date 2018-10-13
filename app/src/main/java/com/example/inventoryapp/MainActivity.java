@@ -1,6 +1,7 @@
 package com.example.inventoryapp;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     SQLiteDatabase db;
 
     RelativeLayout emptyView;
+
+    ListView iPhoneListView;
 
     private static final int STORE_LOADER = 0; // Arbitrary integer value for loader
 
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
         // Find the ListView that will have the iPhone data
-        ListView iPhoneListView = (ListView) findViewById(R.id.list);
+        iPhoneListView = (ListView) findViewById(R.id.list);
 
         // Setup Adapter and attach to list view
         mCursorAdapter = new StoreCursorAdapter(this, null);
@@ -60,13 +64,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Attach adapter to ListView
         iPhoneListView.setAdapter(mCursorAdapter);
 
-        if (mCursorAdapter.getCount() == 0) {
-            emptyView.setVisibility(View.VISIBLE);
-            iPhoneListView.setVisibility(View.INVISIBLE);
-        } else {
-            emptyView.setVisibility(View.GONE);
-            iPhoneListView.setVisibility(View.VISIBLE);
-        }
+        // Setup item click listener to go to EditorActivity
+        iPhoneListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+
+                Uri currentIPhoneUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, id);
+
+                intent.setData(currentIPhoneUri);
+
+                startActivity(intent);
+            }
+        });
 
         // Start loader
         getLoaderManager().initLoader(STORE_LOADER, null, this);
@@ -120,6 +131,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCursorAdapter.swapCursor(data);
+
+        // Toggle the empty view if no data
+        if (mCursorAdapter.getCount() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            iPhoneListView.setVisibility(View.INVISIBLE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+            iPhoneListView.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override

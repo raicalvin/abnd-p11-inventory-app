@@ -6,4 +6,6 @@
 
     <!-- Toast string for successful insertion of iPhone -->
     <string name="editor_insert_iphone_successful">iPhone added!</string>
+
+    <string name="editor_activity_title_edit_iphone">Edit iPhone Entry</string>
 </resources>

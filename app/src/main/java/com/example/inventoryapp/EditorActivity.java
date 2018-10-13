@@ -1,6 +1,7 @@
 package com.example.inventoryapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,15 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
+        Intent intent = getIntent();
+        Uri currentPetUri = intent.getData();
+
+        if (currentPetUri == null) {
+            setTitle("Add New iPhone");
+        } else {
+            setTitle(getString(R.string.editor_activity_title_edit_iphone));
+        }
 
         iPhoneEdtTxt = (EditText) findViewById(R.id.iphone_name_edit);
         priceEdtTxt = (EditText) findViewById(R.id.price_edit_text);

@@ -69,6 +69,9 @@ public class StoreProvider extends ContentProvider {
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
 
+        // Set notification URI on cursor
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
     }
 
@@ -90,7 +93,7 @@ public class StoreProvider extends ContentProvider {
     }
 
     /**
-     * Helper method to insert pet into database using URI
+     * Helper method to insert iPhone into database using URI
      * @param uri
      * @param values
      * @return
@@ -105,6 +108,10 @@ public class StoreProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
+
+        // Notify all listeners that the data has changed for iPhone uri
+        getContext().getContentResolver().notifyChange(uri, null);
+
         // Once we know the ID of the new row in the table, return the new URI
         return ContentUris.withAppendedId(uri, id);
     }
@@ -152,7 +159,15 @@ public class StoreProvider extends ContentProvider {
         }
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-        return database.update(StoreContract.StoreEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        int rowsUpdated = database.update(StoreContract.StoreEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsUpdated;
+
     }
 
     /**
@@ -161,17 +176,26 @@ public class StoreProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        int rowsDeleted;
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case IPHONES:
-                return database.delete(StoreContract.StoreEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(StoreContract.StoreEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case IPHONE_ID:
                 selection = StoreContract.StoreEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return database.delete(StoreContract.StoreEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(StoreContract.StoreEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
+
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsDeleted;
     }
 
     /**
