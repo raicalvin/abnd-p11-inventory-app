@@ -100,13 +100,15 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="+"
-                        android:id="@+id/increment_quantity_button"/>
+                        android:id="@+id/increment_quantity_button"
+                        android:backgroundTint="#58D294"/>
                     <Button
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="-"
-                        android:id="@+id/decrement_quantity_button"/>
+                        android:id="@+id/decrement_quantity_button"
+                        android:backgroundTint="#E06058"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -159,14 +161,16 @@
                 android:layout_height="wrap_content"
                 android:text="Save iPhone"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/add_iphone_button"/>
+                android:id="@+id/add_iphone_button"
+                android:backgroundTint="#58D294"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Delete iPhone"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/delete_iphone_button"/>
+                android:id="@+id/delete_iphone_button"
+                android:backgroundTint="#E06058"/>
         </LinearLayout>
 
 

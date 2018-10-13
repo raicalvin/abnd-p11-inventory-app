@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="@dimen/activity_margin">
+    android:padding="@dimen/activity_margin"
+    android:descendantFocusability="blocksDescendants"
+    >
 
     <LinearLayout
         android:layout_width="0dp"
@@ -19,7 +21,8 @@
             android:fontFamily="sans-serif"
             android:textStyle="bold"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="#1D4682" />
+            android:textColor="#1D4682"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
             android:id="@+id/price"
@@ -47,6 +50,7 @@
         android:src="@drawable/ic_money_button_sign"
         android:layout_weight="1"
         android:backgroundTint="#58D294"
+        android:focusable="false"
         />
 
 </LinearLayout>
