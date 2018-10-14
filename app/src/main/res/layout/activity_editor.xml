@@ -171,6 +171,14 @@
                 android:layout_alignParentBottom="true"
                 android:id="@+id/delete_iphone_button"
                 android:backgroundTint="#E06058"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Call Supplier"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/call_iphone_button"
+                android:backgroundTint="#5BCFEB"/>
         </LinearLayout>
 
 

@@ -1,5 +1,6 @@
 package com.example.inventoryapp;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -8,11 +9,15 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CursorAdapter;
@@ -30,7 +35,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Uri mCurrentIPhoneUri;
 
     EditText iPhoneEdtTxt, priceEdtTxt, quantityEdtTxt, supplierEdtTxt, phoneEdtTxt;
-    Button incrementBtn, decrementBtn, addiPhoneBtn, deleteiPhoneBtn;
+    Button incrementBtn, decrementBtn, addiPhoneBtn, deleteiPhoneBtn, calliPhoneSupplier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
+        calliPhoneSupplier = (Button) findViewById(R.id.call_iphone_button);
+
+        calliPhoneSupplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phoneNumber = "9168341992";
+                callPhoneNumber(phoneNumber);
+            }
+
+        });
+
         if (mCurrentIPhoneUri == null) {
             deleteiPhoneBtn.setVisibility(View.GONE);
         }
@@ -94,6 +110,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         getLoaderManager().initLoader(EXISTING_IPHONE_LOADER, null, this);
 
     }
+
+    /** This is the code that will call the supplier phone */
+    private void callPhoneNumber(String number) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: " + number));
+        startActivity(intent);
+    }
+    /** End suplier phone call code */
 
     public void decrementQuantity() {
         String quantityText = quantityEdtTxt.getText().toString().trim();
