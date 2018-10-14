@@ -3,12 +3,10 @@ package com.example.inventoryapp;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,21 +14,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CursorAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.inventoryapp.data.StoreContract.StoreEntry;
-import com.example.inventoryapp.data.StoreDbHelper;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     Button addItemButton;
-
-    SQLiteDatabase db;
 
     RelativeLayout emptyView;
 
@@ -72,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-                Log.i("TAG", "onItemClick: the smaaaaalllll id is " + id);
 
                 Uri currentIPhoneUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, id);
 
@@ -94,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     /**
-     * Insert a new product with the appropriate values into the database.
+     * Insert new product with appropriate values into the database
      */
     private void insertProduct() {
 
@@ -160,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         Uri iPhoneSellUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, Long.parseLong(ID));
 
-        // Update the quantity in the database
+        // Update the quantity in database
         int rowsAffected = getContentResolver().update(iPhoneSellUri, values, null, null);
 
     }
