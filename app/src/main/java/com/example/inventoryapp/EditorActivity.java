@@ -1,31 +1,22 @@
 package com.example.inventoryapp;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.inventoryapp.data.StoreContract.StoreEntry;
-import com.example.inventoryapp.data.StoreDbHelper;
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -34,6 +25,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private Uri mCurrentIPhoneUri;
 
+    /** Buttons and Fields from layout resource file */
     EditText iPhoneEdtTxt, priceEdtTxt, quantityEdtTxt, supplierEdtTxt, phoneEdtTxt;
     Button incrementBtn, decrementBtn, addiPhoneBtn, deleteiPhoneBtn, calliPhoneSupplier;
 
@@ -83,8 +75,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         calliPhoneSupplier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phoneNumber = "9168341992";
-                callPhoneNumber(phoneNumber);
+                String phoneNumber = phoneEdtTxt.getText().toString().trim();
+                if (phoneNumber.length() != 10) {
+                    Toast.makeText(getApplicationContext(), "Sorry, please enter a valid 10-digit phone number before making a call!", Toast.LENGTH_LONG).show();
+                } else {
+                    callPhoneNumber(phoneNumber);
+                }
             }
 
         });
@@ -116,7 +112,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: " + number));
         startActivity(intent);
     }
-    /** End suplier phone call code */
 
     public void decrementQuantity() {
         String quantityText = quantityEdtTxt.getText().toString().trim();
@@ -131,7 +126,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     public void incrementQuantity() {
         String quantityText = quantityEdtTxt.getText().toString().trim();
-        int quantity = 0;
+        int quantity;
         if (quantityText.isEmpty()) {
             quantity = 1;
         } else {
@@ -203,30 +198,28 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     /**
-     * Prompt the user to confirm that they want to delete this pet.
+     * Prompt user if they want to delete iPhone entry
      */
     private void showDeleteConfirmationDialog() {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
+        // Create an AlertDialog.Builder, set message, and add clickListeners
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.delete_dialog_msg);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the pet.
+                // Delete iPhone since user selected negative.
                 deleteiPhone();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the iPhone.
+                // Continue iPhone edit since user selected "Cancel"
                 if (dialog != null) {
                     dialog.dismiss();
                 }
             }
         });
 
-        // Create and show the AlertDialog
+        // Create and show AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -286,7 +279,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 null,
                 null,
                 null);
-
     }
 
     @Override
@@ -296,7 +288,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         if (cursor.moveToFirst()) {
-            // Find the columns of pet attributes that we're interested in
+            // Columns of specific iPhone
             int nameColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_IPHONE_NAME);
             int priceColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_QUANTITY);
@@ -304,14 +296,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             int phoneColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_SUPPLIER_PHONE);
 
 
-            // Extract out the value from the Cursor for the given column index
+            // Extract values from columns using index
             String name = cursor.getString(nameColumnIndex);
             Double price = cursor.getDouble(priceColumnIndex);
             Long quantity = cursor.getLong(quantityColumnIndex);
             String supplier = cursor.getString(supplierColumnIndex);
             String phone = cursor.getString(phoneColumnIndex);
 
-            // Update the views on the screen with the values from the database
+            // Update views with database values from cursor
             iPhoneEdtTxt.setText(name);
             priceEdtTxt.setText(price.toString());
             quantityEdtTxt.setText(quantity.toString());
@@ -323,6 +315,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        // Set all fields to blank
         iPhoneEdtTxt.setText("");
         priceEdtTxt.setText("");
         quantityEdtTxt.setText("");
