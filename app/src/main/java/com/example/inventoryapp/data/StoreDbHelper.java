@@ -5,8 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.example.inventoryapp.data.StoreContract.StoreEntry;
 
-// This Class will help us create, manage, and open databases in our app
-
+// This class helps create, manage, and open the database needed for inventory
 public class StoreDbHelper extends SQLiteOpenHelper {
 
     /**
@@ -15,7 +14,6 @@ public class StoreDbHelper extends SQLiteOpenHelper {
      */
     public static final String DATABASE_NAME = "store.db";
     public static final int DATABASE_VERSION = 1;
-
 
     private static final String INTEGER_TYPE = " INTEGER, ";
     private static final String TEXT_TYPE = " TEXT, ";
@@ -51,7 +49,6 @@ public class StoreDbHelper extends SQLiteOpenHelper {
          * and instance of an SQLiteDatabase object and then return it to the UI activity
          * that asked for the database.
          */
-
         String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + StoreEntry.TABLE_NAME + "(" +
                     StoreEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -65,22 +62,8 @@ public class StoreDbHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Called when the database needs to be upgraded. The implementation
-     * should use this method to drop tables, add tables, or do anything else it
-     * needs to upgrade to the new schema version.
-     * <p>
-     * <p>
-     * The SQLite ALTER TABLE documentation can be found
-     * <a href="http://sqlite.org/lang_altertable.html">here</a>. If you add new columns
-     * you can use ALTER TABLE to insert them into a live table. If you rename or remove columns
-     * you can use ALTER TABLE to rename the old table, then create the new table and then
-     * populate the new table with the contents of the old table.
-     * </p><p>
-     * This method executes within a transaction.  If an exception is thrown, all changes
-     * will automatically be rolled back.
-     * </p>
      *
-     * More simply: This will drop the old database and then create a new one.
+     * This will drop the old database and then create a new one.
      *
      * @param db         The database.
      * @param oldVersion The old database version.
