@@ -153,7 +153,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     public void sellItem(long quantity, String ID) {
-        Log.i("SUPPP", "the BIG ID is  " + ID);
 
         ContentValues values = new ContentValues();
         values.put(StoreEntry._ID, ID);
@@ -161,7 +160,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         Uri iPhoneSellUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, Long.parseLong(ID));
 
-        // Insert the values into the database:
+        // Update the quantity in the database
         int rowsAffected = getContentResolver().update(iPhoneSellUri, values, null, null);
+
     }
 }

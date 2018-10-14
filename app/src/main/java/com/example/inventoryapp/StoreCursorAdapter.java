@@ -61,7 +61,7 @@ public class StoreCursorAdapter extends CursorAdapter {
         priceTextView.setText("$" + iPhonePrice);
         quantityTextView.setText("Stock: " + iPhoneQuantity);
 
-        /** EXPERIMENTAL AREA */
+        /** Update quantity using the sale button */
         ImageButton saleButton = (ImageButton) view.findViewById(R.id.sale_button);
 
         int idColumnIndex = cursor.getColumnIndex(StoreContract.StoreEntry._ID);
@@ -72,13 +72,12 @@ public class StoreCursorAdapter extends CursorAdapter {
             public void onClick(View v) {
                 long soldQuantity = Long.parseLong(iPhoneQuantity) - 1;
                 if (soldQuantity < 0) {
-                    Toast.makeText(v.getContext(), "Hey!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "Hey! You have no iPhones left!", Toast.LENGTH_SHORT).show();
                 } else {
                     activity.sellItem(soldQuantity, iPhoneId);
                 }
             }
         });
-        /** EXPERIMENTAL AREA */
 
     }
 }
