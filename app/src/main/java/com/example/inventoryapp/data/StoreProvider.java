@@ -4,14 +4,9 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 public class StoreProvider extends ContentProvider {
@@ -23,6 +18,7 @@ public class StoreProvider extends ContentProvider {
     /** Setup the URI Matcher */
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+    /** Add patterns to the URI Matcher */
     static {
         sUriMatcher.addURI(StoreContract.CONTENT_AUTHORITY, StoreContract.PATH_IPHONES, IPHONES);
         sUriMatcher.addURI(StoreContract.CONTENT_AUTHORITY, StoreContract.PATH_IPHONES + "/#", IPHONE_ID);
@@ -34,9 +30,7 @@ public class StoreProvider extends ContentProvider {
     /** Database helper object */
     private StoreDbHelper mDbHelper;
 
-    /**
-     * Initialize the provider and the database helper object.
-     */
+    /** Initialize the provider and the database helper object */
     @Override
     public boolean onCreate() {
         mDbHelper = new StoreDbHelper(getContext());
@@ -44,7 +38,7 @@ public class StoreProvider extends ContentProvider {
     }
 
     /**
-     * Perform the query for the given URI. Use the given projection, selection, selection arguments, and sort order.
+     * Perform query for given URI. Use given projection, selection, selection arguments, and sort order.
      */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
@@ -66,7 +60,7 @@ public class StoreProvider extends ContentProvider {
                 cursor = database.query(StoreContract.StoreEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+                throw new IllegalArgumentException("Oh no! Cannot query unknown URI: " + uri);
         }
 
         // Set notification URI on cursor
@@ -75,9 +69,7 @@ public class StoreProvider extends ContentProvider {
         return cursor;
     }
 
-    /**
-     * Insert new data into the provider with the given ContentValues.
-     */
+    /** Insert new data into the provider with the given ContentValues */
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         // Figure out which pattern matches using the sUriMatcher:
@@ -88,7 +80,7 @@ public class StoreProvider extends ContentProvider {
             case IPHONES:
                 return insertIPhone(uri, contentValues);
             default:
-                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+                throw new IllegalArgumentException("Insertion is not supported for: " + uri);
         }
     }
 
@@ -105,7 +97,7 @@ public class StoreProvider extends ContentProvider {
         long id = database.insert(StoreContract.StoreEntry.TABLE_NAME, null, values);
         // If ID = -1, then insertion failed. Log an error:
         if (id == -1) {
-            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            Log.e(LOG_TAG, "Failed to insert row for: " + uri);
             return null;
         }
 
@@ -130,7 +122,7 @@ public class StoreProvider extends ContentProvider {
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updateIPhone(uri, values, selection, selectionArgs);
             default:
-                throw new IllegalArgumentException("Update is not supported for " + uri);
+                throw new IllegalArgumentException("Update is not supported for: " + uri);
         }
     }
 
@@ -171,7 +163,7 @@ public class StoreProvider extends ContentProvider {
     }
 
     /**
-     * Delete the data at the given selection and selection arguments.
+     * Delete data at given selection and selection arguments.
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -199,7 +191,7 @@ public class StoreProvider extends ContentProvider {
     }
 
     /**
-     * Returns the MIME type of data for the content URI.
+     * Returns MIME type of data for the content URI.
      */
     @Override
     public String getType(Uri uri) {
