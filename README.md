@@ -9,16 +9,16 @@ This project was for my Grow With Google Scholarship Android Basics Nanodegree f
 ### Concepts
 
 - SQLite to create and manage the database and schema within the app
+- Content Providers are used to access the database information
+- Custom Cursor Adapters were used to populate a ListView of items stored in the database
+- Cursor Loaders were used to handle the loading of data from the database on a background thread
+- Intents were used to navigate between pages of the app and to call the provided supplier for each item
 
 ## User Interface
 
-Coming soon...
+The UI consisted of a simple ListView displaying each iPhone in the database. Clicking on each list item opens up an activity where a user can view/edit/update details about the product as well as a button to delete the item entirely from the database. Furthermore, the "ADD IPHONE" button opens an empty detail list where a user can input a new iPhone with its price, quantity, supplier, and other information.
 
-![](http://placekitten.com/300/200) ![](http://placekitten.com/300/200)
-
-## User Experience
-
-Coming soon...
+![](https://github.com/raicalvin/pictures/blob/master/pix-abnd-p11-iphone-inventory-app/pic1.png) ![](https://github.com/raicalvin/pictures/blob/master/pix-abnd-p11-iphone-inventory-app/pic2.png) ![](https://github.com/raicalvin/pictures/blob/master/pix-abnd-p11-iphone-inventory-app/pic3.png)
 
 ## Getting Started
 
@@ -34,42 +34,17 @@ The repository may be downloaded using the following Git command
 git clone https://github.com/raicalvin/abnd-p11-inventory-app.git
 ```
 
-## Code Examples
-
-Coming soon...
-
-```java
-public void codeSample1(int input) {
-    test = testOriginal - input;
-}
-```
-
-## Issues
-
-This section should list out any known issues that are currently present in the project. Include a brief description and introduction here. List the issues down below in a bulleted list with any necessary code/examples.
-
-- Issue 1 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque egestas sapien ac porta posuere. Curabitur viverra `code() - testIntegral` feugiat. Duis dapibus, erat sed dignissim dictum, eros eros faucibus turpis, sed tempus nibh tellus varius lectus.
-
-- Issue 2 - Lorem `ipsum() -> v.ViewModel` dolor sit amet, consectetur adipiscing elit. Quisque egestas sapien ac porta posuere. Curabitur viverra tellus nec lacinia feugiat. Duis dapibus, erat sed `var s = 'ipsum something'` dictum, eros eros faucibus turpis, sed tempus nibh tellus varius lectus.
-
 ## Authors
 
-- Calvin S Rai - *Developer & Designer* - [GitHub](https://github.com/raicalvin)
+- Calvin S Rai - _Developer & Designer_ - [GitHub](https://github.com/raicalvin)
 
 ## Reference
 
 Coming soon...
 
-- API Library 1 - *Description of documentation* - [Documentation](https://github.com/raicalvin)
-- API Library 2 - *Description of documentation* - [Documentation](https://github.com/raicalvin)
-- API Library 3 - *Description of documentation* - [Documentation](https://github.com/raicalvin)
-
-## Planned Updates
-
-* Stage 2
-    * Stage 2 include an interface for the user to interact with the data stored in the database.
-* Stage 1
-    * Stage 1 includes only the database and the necessary query methods to manage the product listing database.
+- API Library 1 - _Description of documentation_ - [Documentation](https://github.com/raicalvin)
+- API Library 2 - _Description of documentation_ - [Documentation](https://github.com/raicalvin)
+- API Library 3 - _Description of documentation_ - [Documentation](https://github.com/raicalvin)
 
 ## Contact
 
